@@ -3,17 +3,12 @@ A galaga-like arcade game for our team's Software Engineering I project. Develop
 
 Lithobreaking [noun]: Deceleration of a falling object due to impact with the ground.
 
-## Versioning
-
-Follow **MAJOR.MINOR.PATCH** versions:
-* **MAJOR** -> big updates or mechanics
-* **MINOR** -> new features/levels added
-* **PATCH** -> small fixes
-
-Example:
-```bash
-v1.2.3
-```
+### Source Control Strategy
+* Vertical Slicing
+* Don't carry unfinished work into the next sprint
+* Work sequentially
+* Work on one task at a time
+* Small working changes are better than partially implemented changes
 
 ### Working
 
