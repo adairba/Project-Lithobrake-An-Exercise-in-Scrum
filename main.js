@@ -8,6 +8,7 @@ var playerWidth = 40; // replaced both width and height names for these variable
 var playerHeight = 40;
 const PLAYER_SPEED = 10;   // Speed at which the player moves.
 let playerX = 175;             // Center/Home position for player. Outside of player scope to allow for persistance after changes.
+let playerY = 700;
 let rightDown = false;
 let leftDown = false;
 var color = "rgb(243, 239, 239)";
@@ -46,7 +47,7 @@ function Init()
     canvasHeight = canvas.height;
 }
 
-function start()
+function Start()
 {
 
     var startPage = document.getElementById("startPage");
@@ -69,23 +70,17 @@ function start()
 function Player()
 {
 
-    if(!gameStarted)
-    {
-        return;
-    }
-
     // Once input is detected, the X position is moved based on left/right key press.
     // Value on the right determines the speed.
     if (rightDown && playerX < canvasWidth - playerWidth- 15) // boundary for right
         playerX += PLAYER_SPEED;
     else if (leftDown && playerX > 15) // boundary for left
         playerX -= PLAYER_SPEED;
-    // Drawing logic rect([x cord], [y cord], [width], [height])
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.moveTo(playerX + (playerWidth / 2), 565); 
-    ctx.lineTo(playerX, 565 + playerHeight); 
-    ctx.lineTo(playerX + playerWidth, 565 + playerHeight);
+    ctx.moveTo(playerX + (playerWidth / 2), playerY); 
+    ctx.lineTo(playerX, playerY + playerHeight); 
+    ctx.lineTo(playerX + playerWidth, playerY + playerHeight);
     ctx.closePath();
     ctx.fill();
 }
@@ -93,7 +88,12 @@ function Player()
 //main game loop, everything that needs to run in an interval needs to go here
 function GameLoop()
 {
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    if(!gameStarted)
+    {
+        return;
+    }
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     Player();
     UpdateProjectile();
@@ -106,3 +106,4 @@ setInterval(GameLoop, 10);
 // Event listeners that wait for any keypress. Once a key is pressed or released, corresponding function from above is called.
 window.onkeydown = onKeyDown;
 window.onkeyup = onKeyUp;
+window.Start = Start;
