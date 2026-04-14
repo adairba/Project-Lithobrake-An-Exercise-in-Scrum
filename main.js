@@ -1,11 +1,15 @@
 var canvas;
 var ctx;
-var WIDTH;
-var HEIGHT;
+var canvasWidth; // canvas width for boundary calculation
+var canvasHeight;
+var playerWidth = 40; // replaced both width and height names for these variable names
+var playerHeight = 40;
 const PLAYER_SPEED = 10;   // Speed at which the player moves.
-playerX = 175;             // Center/Home position for player. Outside of player scope to allow for persistance after changes.
+var playerX = 175;             // Center/Home position for player. Outside of player scope to allow for persistance after changes.
 rightDown = false;
 leftDown = false;
+var color = "rgb(243, 239, 239)";
+var gameStarted = false;
 
 // If either key press is detected, corresponding bool is set to true.
 function onKeyDown(evt)
@@ -31,26 +35,52 @@ function Init()
 {
     canvas = document.getElementById("canvas");
     ctx = document.getElementById("canvas").getContext("2d");
-    WIDTH = canvas.width;
-    HEIGHT = canvas.height;
+    canvasWidth = canvas.width;
+    canvasHeight = canvas.height;
     return setInterval(Player, 10);
 }
 
+function start()
+{
+
+    var startPage = document.getElementById("startPage");
+    
+    startPage.classList.add("fade-out");
+
+    gameStarted = true;
+
+    document.getElementById("startScreen").style.opacity = "0";
+    
+    // After the fade finishes, hide it completely so it doesn't block clicks
+    setTimeout(() => {
+        document.getElementById("startScreen").style.display = "none";
+    }, 1000);
+
+
+}
 //draw a square for the player
 //x cord, y cord, width, and height
 function Player()
 {
+
+    if(!gameStarted)
+    {
+        return;
+    }
     // Clears the canvas of the rectangle. Without this, it smears across screen.
-    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     // Once input is detected, the X position is moved based on left/right key press.
     // Value on the right determines the speed.
-    if (rightDown) 
+    if (rightDown && playerX < canvasWidth - playerWidth- 15) // boundary for right
         playerX += PLAYER_SPEED;
-    else if (leftDown)
+    else if (leftDown && playerX > 15) // boundary for left
         playerX -= PLAYER_SPEED;
     // Drawing logic rect([x cord], [y cord], [width], [height])
+    ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.rect(playerX, 700, 40, 40);
+    ctx.moveTo(playerX + (playerWidth / 2), 565); 
+    ctx.lineTo(playerX, 565 + playerHeight); 
+    ctx.lineTo(playerX + playerWidth, 565 + playerHeight);
     ctx.closePath();
     ctx.fill();
 }
