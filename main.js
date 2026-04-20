@@ -1,4 +1,5 @@
 import { Shoot, UpdateProjectile, DrawProjectile } from "./modules/projectile.js"
+import { DrawEnemy, initEnemies} from "./modules/enemy.js"
 
 var canvas;
 var ctx;
@@ -65,11 +66,11 @@ function Start()
 
 
 }
+
 //draw a square for the player
 //x cord, y cord, width, and height
 function Player()
 {
-
     // Once input is detected, the X position is moved based on left/right key press.
     // Value on the right determines the speed.
     if (rightDown && playerX < canvasWidth - playerWidth- 15) // boundary for right
@@ -94,13 +95,14 @@ function GameLoop()
     }
 
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
+    DrawEnemy(ctx);
     Player();
     UpdateProjectile();
     DrawProjectile(ctx);
 }
 
 Init();
+initEnemies(canvasWidth, canvasHeight);
 setInterval(GameLoop, 10);
 
 // Event listeners that wait for any keypress. Once a key is pressed or released, corresponding function from above is called.
