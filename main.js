@@ -1,5 +1,5 @@
 import { Shoot, UpdateProjectile, DrawProjectile, CheckCollision } from "./modules/projectile.js"
-import { DrawEnemy, initEnemies } from "./modules/enemy.js"
+import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision } from "./modules/enemy.js"
 
 //---- Canvas -- //
 var canvas;
@@ -19,11 +19,9 @@ let rightDown = false;
 let leftDown = false;
 var color = "rgb(243, 239, 239)";
 
-
 //---- Page Boolean Values --//
 var gameStarted = false;
 var gameOver = false;
-
 
 //---- Lives --//
 let lives = 3;
@@ -103,7 +101,6 @@ function TouchControls() {
     });
 }
 
-
 //---- Game State Functions --//
 function Init()
 {
@@ -172,7 +169,6 @@ function GameOver()
     }, 50); 
 }
 
-
 //---- Player and Drawing Functions --//
 function Player()
 {
@@ -195,7 +191,6 @@ function Player()
     ctx.fill();
 }
 
-
 // Draws the live icon and the number of lives on the 
 // left side on the screen. When the player gets close 
 // it will fade so that it can be clean gameplay.
@@ -216,7 +211,6 @@ function DrawLives()
 
 
     // the mini icon
-
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.moveTo(iconX + (iconWidth / 2), iconY); 
@@ -226,7 +220,6 @@ function DrawLives()
     ctx.fill();
 
     // draws the number of live "x3"
-
     ctx.fillStyle = "white";
     ctx.font = "16px Arial";
     ctx.textAlign = "center";
@@ -288,7 +281,6 @@ function VulnerableTimer()
 }
 
 //main game loop, everything that needs to run in an interval needs to go here
-
 //---- The Main Game loop (where the game actually lives) --//
 function GameLoop()
 {
@@ -304,10 +296,8 @@ function GameLoop()
     UpdateProjectile();
     CheckCollision();
     DrawProjectile(ctx);
-
-
-    /*
-    if()//collison of enemy or collision of projectile
+    EnemyProjBehavior(ctx);
+    if(EnemyCheckCollision(playerX, playerY, playerWidth, playerHeight))//collison of enemy or collision of projectile
     {
         lives -= 1;
 
@@ -321,7 +311,6 @@ function GameLoop()
             return
         }
     }
-    */
 
     
 
