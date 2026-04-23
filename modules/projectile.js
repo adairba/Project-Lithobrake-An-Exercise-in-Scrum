@@ -46,6 +46,12 @@ export function DrawProjectile(ctx)
     
 }
 
+
+export function ClearProjectiles()
+{
+    projectiles = [];
+}
+
 export function CheckCollision()
 {
     //checking every projectile with every enemy

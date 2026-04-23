@@ -1,5 +1,5 @@
-import { Shoot, UpdateProjectile, DrawProjectile, CheckCollision } from "./modules/projectile.js"
-import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies } from "./modules/enemy.js"
+import { Shoot, UpdateProjectile, DrawProjectile, CheckCollision, ClearProjectiles } from "./modules/projectile.js"
+import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies, ClearEnemyProjectiles } from "./modules/enemy.js"
 
 //---- Canvas -- //
 var canvas;
@@ -149,12 +149,13 @@ function Restart()
 
 
             ResetEnemies(canvasWidth);
+            ClearProjectiles();
+            ClearEnemyProjectiles();
             lives = 3;
             playerX = 175;             
             playerY = 700;
             gameOver = false;
-
-
+            return;
 
         }, 500);
     

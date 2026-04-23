@@ -137,6 +137,11 @@ export function DrawProjectile(ctx)
     
 }
 
+export function ClearEnemyProjectiles()
+{
+    projectiles = [];
+}
+
 // One method to integrate the enemy's projectile behavior.
 export function EnemyProjBehavior(ctx)
 {
