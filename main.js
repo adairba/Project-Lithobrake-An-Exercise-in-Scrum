@@ -1,5 +1,9 @@
 import { Shoot, UpdateProjectile, DrawProjectile, CheckCollision, ClearProjectiles } from "./modules/projectile.js"
+<<<<<<< HEAD
 import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies, ClearEnemyProjectiles, ProceduralGenEnemies, ResetEnemiesAfterDeath, SpreadOutAndIn } from "./modules/enemy.js"
+=======
+import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies, ClearEnemyProjectiles, ProceduralGenEnemies, ResetEnemiesAfterDeath, EnemiesPosition, BoxMovementOfEnemies, Spreading } from "./modules/enemy.js"
+>>>>>>> 078565f (added the spreading logic to the enemies. This doesnt need to be prioritized its just something to add at the end when everything is polished)
 
 //---- Canvas -- //
 var canvas;
@@ -366,8 +370,12 @@ function GameLoop()
     }
 
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+<<<<<<< HEAD
     DrawEnemy(ctx);
     SpreadOutAndIn(canvasWidth);
+=======
+    DrawEnemy(ctx, canvasWidth);
+>>>>>>> 078565f (added the spreading logic to the enemies. This doesnt need to be prioritized its just something to add at the end when everything is polished)
     Player();
     DrawLives();
     UpdateProjectile();

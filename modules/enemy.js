@@ -52,6 +52,7 @@ let minProjDelay = 40;
 let enemyState = ["Diver", "Shooter", "Both"];
 
 
+<<<<<<< HEAD
 // -- spread out and in animation functions -- //
 var isSpreading = true;
 
@@ -72,6 +73,22 @@ var boxX
 var boxSpeed =  1;
 var boxDirection = 1;
 
+=======
+// this is basically the formation of the box of enemies moving side to side
+var formationOffsetX = 0;
+var formationSpeed = 0.01;
+var formationTimer = 0;
+var formationRange = 35;    
+
+// ---- Enemy spread animation ----
+var spreadProgress = 0;
+var isSpreadingOut = true;
+
+var spreadRate = 0.007;
+var returnRate = 0.007;
+
+
+>>>>>>> 078565f (added the spreading logic to the enemies. This doesnt need to be prioritized its just something to add at the end when everything is polished)
 
 
 // Help with this function is from: https://chatgpt.com/c/69ec590b-1fac-83ea-9cf4-a6a25f0a5845
@@ -134,27 +151,48 @@ export function initEnemies(canvasWidth) {
 
 
             let randomEnemy = Math.floor(Math.random() * enemyState.length);
-
             var enemyX = xStart + (j * horizStep);
             var enemyY = topMargin + enemyHeight + (vertStep * i);
 
+<<<<<<< HEAD
+            var enemyX = xStart + (j * horizStep);
+            var enemyY = topMargin + enemyHeight + (vertStep * i);
+
+=======
+
+            // determines the left or right or center position of each enemy
+            var rowCenter = (enemyCols - 1) / 2;
+            var distanceFromRowCenter = j - rowCenter;
+
+            // this calculates the actual movement based on the values above. They movement during the spreading;
+            var trapeziumX = enemyX + (distanceFromRowCenter * i * 4);
+            var trapeziumY = enemyY + (i * 6);
+>>>>>>> 078565f (added the spreading logic to the enemies. This doesnt need to be prioritized its just something to add at the end when everything is polished)
             enemies.push(
                 {
                     x: enemyX,
                     y: enemyY,
                     initialX: enemyX,
                     initialY: enemyY,
+<<<<<<< HEAD
+=======
+                    targetX: trapeziumX,
+                    targetY: trapeziumY,
+>>>>>>> 078565f (added the spreading logic to the enemies. This doesnt need to be prioritized its just something to add at the end when everything is polished)
                     width: enemyWidth,
                     height: enemyHeight,
                     type: enemyState[randomEnemy]
                 });
+
+                enemiesCreated++;
         }
     }
 
-    enemiesCreated++;
+    
 
 }
 
+<<<<<<< HEAD
 
 
 export function SpreadOutAndIn(canvasWidth)
@@ -252,6 +290,52 @@ export function SpreadOutAndIn(canvasWidth)
 }
 
 
+=======
+// controls if they spread or not
+
+export function Spreading()
+{
+    if(isSpreadingOut == true)
+    {
+        spreadProgress += spreadRate;
+
+        if(spreadProgress >= 1)
+        {
+            spreadProgress = 1;
+            isSpreadingOut = false;
+        }
+    }
+    else
+    {
+        spreadProgress -= returnRate;
+        if (spreadProgress <= 0)
+        {
+            spreadProgress = 0;
+            isSpreadingOut = true;
+        }
+    }
+}
+
+// controls the side to side box movement
+
+export function BoxMovementOfEnemies(canvasWidth)
+{
+     formationTimer += formationSpeed;
+
+     formationOffsetX = Math.sin(formationTimer) * formationRange;
+    
+}
+
+// controls the actual positions of each enemy as the move and spread
+export function EnemiesPosition(canvasWidth)
+{
+     for (let e of enemies)
+     {
+         e.x = e.initialX + formationOffsetX + ((e.targetX - e.initialX) * spreadProgress);
+         e.y = e.initialY + ((e.targetY - e.initialY) * spreadProgress);
+     }
+}
+>>>>>>> 078565f (added the spreading logic to the enemies. This doesnt need to be prioritized its just something to add at the end when everything is polished)
 
 // Updates each enemy that is passed into the functions' position 
 export function UpdateEnemy(e) {
@@ -296,14 +380,23 @@ export function ResetEnemiesAfterDeath()
 
 // Iteratively draw the enemies onto the gameplay area based on the amount of enemies in the array produced by initEnemies
 // source for creating the shapes: https://chatgpt.com/share/69ec5cd2-9e2c-83ea-acc4-4bb5a12db495  the pyramid and circle with feet shape
+<<<<<<< HEAD
 export function DrawEnemy(ctx) {
     
     CheckFormationWall();
+=======
+// source for helping with the logic of spreading the enemies: https://chatgpt.com/c/69ec590b-1fac-83ea-9cf4-a6a25f0a5845
+export function DrawEnemy(ctx, canvasWidth) 
+{
+    BoxMovementOfEnemies(canvasWidth);
+    Spreading();
+    EnemiesPosition(canvasWidth);
+>>>>>>> 078565f (added the spreading logic to the enemies. This doesnt need to be prioritized its just something to add at the end when everything is polished)
 
     for (let i = 0; i < enemies.length; i++) {
         const e = enemies[i];
-        UpdateEnemy(e);
 
+        
         if (e.type == "Diver") {
             const stepH = enemyHeight / 5;
             ctx.beginPath();
