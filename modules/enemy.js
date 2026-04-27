@@ -52,6 +52,27 @@ let minProjDelay = 40;
 let enemyState = ["Diver", "Shooter", "Both"];
 
 
+// -- spread out and in animation functions -- //
+var isSpreading = true;
+
+var spreadSpeed = 1.5;
+var returnSpeed = 2;
+var wallBuffer = 10;
+
+var centerX;
+var maxSpreadDistance = 50;
+var maxSpreadDistanceY = 25;
+
+var intialX;
+var initalY;
+
+
+//-- new movement for enemy box --//
+var boxX
+var boxSpeed =  1;
+var boxDirection = 1;
+
+
 
 // Help with this function is from: https://chatgpt.com/c/69ec590b-1fac-83ea-9cf4-a6a25f0a5845
 export function ProceduralGenEnemies(canvasWidth)
@@ -96,7 +117,6 @@ export function initEnemies(canvasWidth) {
     //Going to be working on the animation to where they spread out and back in the near future
 
     let enemiesCreated = 0;
-    enemyCols = 5;
     enemyRows = Math.ceil(currentEnemies / enemyCols);
 
     var xStart = (canvasWidth - (canvasWidth * edgeMargin)) / 2;
@@ -115,10 +135,15 @@ export function initEnemies(canvasWidth) {
 
             let randomEnemy = Math.floor(Math.random() * enemyState.length);
 
+            var enemyX = xStart + (j * horizStep);
+            var enemyY = topMargin + enemyHeight + (vertStep * i);
+
             enemies.push(
                 {
-                    x: xStart + (j * (horizStep)),
-                    y: topMargin + enemyHeight + (vertStep * i),
+                    x: enemyX,
+                    y: enemyY,
+                    initialX: enemyX,
+                    initialY: enemyY,
                     width: enemyWidth,
                     height: enemyHeight,
                     type: enemyState[randomEnemy]
@@ -128,20 +153,128 @@ export function initEnemies(canvasWidth) {
 
     enemiesCreated++;
 
-     
-
 }
+
+
+
+export function SpreadOutAndIn(canvasWidth)
+{
+    var centerX = canvasWidth / 2;
+    var leftWall = wallBuffer;
+    var rightWall = canvasWidth - wallBuffer;
+    var isDoneSpreading = true;
+    var hasAllReturned= true;
+    var hitWall = false;
+
+    for(let e of enemies)
+    {
+        var distanceFromCenter = e.initialX - centerX;
+        var howMuchSpread = distanceFromCenter/centerX;
+        var targetPos = e.initialX + (howMuchSpread * maxSpreadDistance);
+        var targetPosY = e.initalY + maxSpreadDistanceY;
+        
+
+    
+        // starts spreading depending on which side the enemy is on and how close it is to the center. 
+        if(isSpreading == true)
+        {
+            hasAllReturned = false;
+
+            if(e.x < targetPos)
+            {
+                e.x += spreadSpeed;
+                isDoneSpreading = false;
+            }
+            else if(e.x > targetPos)
+            {
+                e.x -=spreadSpeed;
+                isDoneSpreading = false;
+            }
+
+            if(e.y < targetPosY)
+            {
+                e.y += spreadSpeed;
+                isDoneSpreading = false;
+            }
+            else if(e.y > targetPosY)
+            {
+                e.y -= spreadSpeed;
+                isDoneSpreading = false;
+            }
+
+            if(e.x <= leftWall || e.x + enemyWidth >= rightWall)
+            {
+                hitWall = true;
+            }
+        }
+        else // starts returning
+        {
+            isDoneSpreading = false;
+
+            if (e.x < e.initialX)
+            {
+                e.x += returnSpeed;
+                hasAllReturned = false;
+            }
+            else if (e.x > e.initialX)
+            {
+                e.x -= returnSpeed;
+                hasAllReturned = false;
+            }
+
+            if(e.y < e.initalY)
+            {
+                e.y += returnSpeed;
+                hasAllReturned = false;
+            }
+            else if(e.y > e.initalY)
+            {
+                e.y -= returnSpeed;
+                hasAllReturned = false;
+            }
+        }
+    }
+
+    if(isSpreading == true && isDoneSpreading == true)
+    {
+        isSpreading = false;
+    }
+
+    if(hitWall == true)
+    {
+        isSpreading = false;
+    }
+
+    if (isSpreading == false && hasAllReturned == true)
+    {
+        isSpreading = true;
+    }
+}
+
+
 
 // Updates each enemy that is passed into the functions' position 
 export function UpdateEnemy(e) {
     // Checks the boundaries. Hardcoded the screen width for the moment, but plan to fix it to be based on the variable.
-    if (e.x + enemySpeed <= 0 || (e.x + enemyWidth) + enemySpeed >= 400) {
+    if (e.initialX + enemySpeed <= 0 || (e.initialX + enemyWidth) + enemySpeed >= 400) {
         // Once the sprite collides with an edge, we multiple by the speed by -1 to change the direction it is moves in.
         enemySpeed *= -1
     }
     else {
         // Moves the enemy along the X axis at a rate defined in the enemySpeed variable if the enemy is not at the edge.
-        e.x += enemySpeed;
+        e.initialX += enemySpeed;
+    }
+}
+
+function CheckFormationWall()
+{
+    for (let e of enemies)
+    {
+        if (e.homeX + enemySpeed <= 0 || e.homeX + enemyWidth + enemySpeed >= 400)
+        {
+            enemySpeed *= -1;
+            break;
+        }
     }
 }
 
@@ -164,6 +297,9 @@ export function ResetEnemiesAfterDeath()
 // Iteratively draw the enemies onto the gameplay area based on the amount of enemies in the array produced by initEnemies
 // source for creating the shapes: https://chatgpt.com/share/69ec5cd2-9e2c-83ea-acc4-4bb5a12db495  the pyramid and circle with feet shape
 export function DrawEnemy(ctx) {
+    
+    CheckFormationWall();
+
     for (let i = 0; i < enemies.length; i++) {
         const e = enemies[i];
         UpdateEnemy(e);

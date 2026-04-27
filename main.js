@@ -1,5 +1,5 @@
 import { Shoot, UpdateProjectile, DrawProjectile, CheckCollision, ClearProjectiles } from "./modules/projectile.js"
-import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies, ClearEnemyProjectiles, ProceduralGenEnemies, ResetEnemiesAfterDeath } from "./modules/enemy.js"
+import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies, ClearEnemyProjectiles, ProceduralGenEnemies, ResetEnemiesAfterDeath, SpreadOutAndIn } from "./modules/enemy.js"
 
 //---- Canvas -- //
 var canvas;
@@ -367,6 +367,7 @@ function GameLoop()
 
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     DrawEnemy(ctx);
+    SpreadOutAndIn(canvasWidth);
     Player();
     DrawLives();
     UpdateProjectile();
