@@ -222,10 +222,12 @@ function PausePage()
     if(isPaused == true)
     {
         pausePage.style.display = "block";
+        pauseButton.classList.add("pauseDisabled");
     }
     else
     {
         pausePage.style.display = "none";
+        pauseButton.classList.remove("pauseDisabled");
     }
 
     
