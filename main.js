@@ -1,5 +1,5 @@
 import { Shoot, UpdateProjectile, DrawProjectile, CheckCollision, ClearProjectiles } from "./modules/projectile.js"
-import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies, ClearEnemyProjectiles } from "./modules/enemy.js"
+import { DrawEnemy, initEnemies, EnemyProjBehavior, EnemyCheckCollision, ResetEnemies, ClearEnemyProjectiles, ProceduralGenEnemies, ResetEnemiesAfterDeath } from "./modules/enemy.js"
 
 //---- Canvas -- //
 var canvas;
@@ -392,9 +392,13 @@ function GameLoop()
             ctx.clearRect(playerX - 20, playerY - 20, playerWidth + 40, playerHeight + 40);
             Player(); // this is to make sure the player is cleared from the screen before the game over screen appears. 
             GameOver();
+            ResetEnemiesAfterDeath();
             return;
         }
     }
+
+
+    ProceduralGenEnemies(canvasWidth);
 
     
 }
