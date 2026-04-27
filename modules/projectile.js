@@ -1,5 +1,5 @@
 export const name = "projectile";
-import { enemies } from "./enemy.js"
+import { enemies, EnemyVulnerableChecker } from "./enemy.js"
 
 let projectiles = [];
 let projOffset = 15;
@@ -15,6 +15,8 @@ export function Shoot(playerX)
         x: playerX + projOffset,
         y: projY
     });
+
+    
 }
 
 //for every projectile, move it up the screen
@@ -70,6 +72,12 @@ export function CheckCollision()
                 p.y < e.y + e.height &&
                 p.y + projH > e.y
             ) {
+                
+                if(EnemyVulnerableChecker())
+                {
+                    projectiles.splice(i, 1);
+                    break;
+                }
                 //js array manip is weird, splicing replaces the object in the array
                 projectiles.splice(i, 1);
                 enemies.splice(j, 1);

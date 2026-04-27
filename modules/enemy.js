@@ -52,6 +52,12 @@ let minProjDelay = 40;
 let enemyState = ["Diver", "Shooter", "Both"];
 
 
+var isBlinking = false;
+var isInvulnerable = false;
+var enemyVulnerablity = 2;
+
+
+
 
 // Help with this function is from: https://chatgpt.com/c/69ec590b-1fac-83ea-9cf4-a6a25f0a5845
 export function ProceduralGenEnemies(canvasWidth)
@@ -150,6 +156,40 @@ export function ResetEnemies(canvasWidth) {
     projectiles.length = 0;
     enemySpeed = 1;
     initEnemies(canvasWidth);
+    BlinkEnemies();
+}
+
+
+export function BlinkEnemies()
+{
+    
+    isBlinking = true; // it starts blinking immediaelty
+    EnemyVulnerableTimer();
+
+
+    // the interval will change the isBlinking value for a set of 250 ms 
+    // which will then cause the variable in the player functon to change 
+    // the opactiy to 0.2 to 1.0 for a delay of 250 ms. This is repeateely 
+    // happening for 4 seconds
+    
+    const blinkInterval = setInterval(() => {
+        isBlinking = !isBlinking; 
+    }, 250);
+
+    
+    setTimeout(() => {
+        clearInterval(blinkInterval);
+        isBlinking = false; 
+    }, enemyVulnerablity * 1000);
+}
+
+export function EnemyVulnerableTimer()
+{
+    isInvulnerable = true; 
+
+    setTimeout(() => {
+        isInvulnerable = false; 
+    }, enemyVulnerablity * 1000);
 }
 
 // this function resets all enemies back to theire original values after game is over
@@ -167,6 +207,10 @@ export function DrawEnemy(ctx) {
     for (let i = 0; i < enemies.length; i++) {
         const e = enemies[i];
         UpdateEnemy(e);
+
+        ctx.save();
+        ctx.globalAlpha = isBlinking ? 0.2 : 1.0;
+
 
         if (e.type == "Diver") {
             const stepH = enemyHeight / 5;
@@ -230,6 +274,8 @@ export function DrawEnemy(ctx) {
             ctx.stroke();
             ctx.fill();
         }
+
+        ctx.restore();
     }
 }
 
@@ -373,4 +419,9 @@ export function EnemyCheckCollision(playerX, playerY, playerW, playerH) {
             return true;
         }
     }
+}
+
+export function EnemyVulnerableChecker()
+{
+    return isInvulnerable;
 }

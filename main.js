@@ -45,6 +45,10 @@ let isInvulnerable = false;
 let isPaused = false;
 
 
+//---- Sound Effects --//
+const playerShoot = new Audio("soundEffects\\mrfriends-pistol-shot-233473.mp3");
+
+
 
 // If either key press is detected, corresponding bool is set to true.
 function onKeyDown(evt)
@@ -53,6 +57,10 @@ function onKeyDown(evt)
     if (evt.keyCode == 32)
     {
         Shoot(playerX);
+
+
+        const shootingCopy = playerShoot.cloneNode();
+        shootingCopy.play();
     }
     
     if (evt.keyCode == 37)
