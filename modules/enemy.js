@@ -135,10 +135,12 @@ export function initEnemies(canvasWidth) {
                     height: enemyHeight,
                     type: enemyState[randomEnemy]
                 });
+
+                enemiesCreated++;
         }
     }
 
-    enemiesCreated++;
+    
 
     const spawnCopy = spawnEnemies.cloneNode();
     spawnCopy.play();
