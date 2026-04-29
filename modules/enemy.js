@@ -47,8 +47,8 @@ var enemySpeed = 0.8; // Determines the speed at which the enemy moves.
 let projectiles = [];
 let projOffset = 15;
 let projSpeed = 10;
-let projW = 2.5;
-let projH = 25;
+let projW = 50;
+let projH = 65;
 let projDelay = 120; // Cooldown logic. This is galaga, not a bullet hell, so we only want one projectile launched at a time, at least for now.
 let projCD = projDelay; // projCD iteratively is reduced, but is set/reset to projDelay after hitting 0.
 
@@ -78,6 +78,8 @@ const diverSprite = new Image();
 diverSprite.src = "assets/diver.png";
 const bothSprite = new Image();
 bothSprite.src = "assets/both.png";
+const enemyBullet = new Image();
+enemyBullet.src = "assets/enemyBullet.png"
 
 // Help with this function is from: https://chatgpt.com/c/69ec590b-1fac-83ea-9cf4-a6a25f0a5845
 export function ProceduralGenEnemies(canvasWidth)
@@ -258,19 +260,28 @@ export function DrawEnemy(ctx) {
 
         if (e.type == "Diver") 
         {
-            ctx.drawImage(diverSprite, e.x, e.y, enemySpriteWidth, enemySpriteHeight);
+            DrawRotatedSprite(ctx, diverSprite, e.x, e.y, enemySpriteWidth, enemySpriteHeight);
         }
         else if (e.type == "Shooter") 
         {
-            ctx.drawImage(shooterSprite, e.x, e.y, enemySpriteWidth, enemySpriteHeight);
+            DrawRotatedSprite(ctx, shooterSprite, e.x, e.y, enemySpriteWidth, enemySpriteHeight);
         }
         else 
         {
-            ctx.drawImage(bothSprite, e.x, e.y, enemySpriteWidth, enemySpriteHeight)
+            DrawRotatedSprite(ctx, bothSprite, e.x, e.y, enemySpriteWidth, enemySpriteHeight);
         }
 
         ctx.restore();
     }
+}
+
+function DrawRotatedSprite(ctx, sprite, x, y, width, height)
+{
+    ctx.save();
+    ctx.translate(x + width / 2, y + height / 2);
+    ctx.rotate(Math.PI);
+    ctx.drawImage(sprite, -width / 2, -height / 2, width, height);
+    ctx.restore();
 }
 
 /* Projectile logic below. Heavily takes after that of projectile.js */
@@ -368,20 +379,7 @@ export function DrawProjectile(ctx) {
     for (let p of projectiles) 
     {
         ctx.save();
-
-        if(p.type == "Shooter")
-        {
-            ctx.fillStyle = "blue";
-        }
-        else
-        {
-            ctx.fillStyle = "red";
-        }
-        ctx.beginPath();
-        ctx.rect(p.x, p.y, projW, projH);
-        ctx.closePath();
-        ctx.fill();
-
+        ctx.drawImage(enemyBullet, p.x, p.y, projW, projH);
         ctx.restore();
     }
 
@@ -410,12 +408,13 @@ export function EnemyProjBehavior(ctx) {
 }
 
 // Check to see if enemy projectile strikes the player. Return true if the player is hit.
-export function EnemyCheckCollision(playerX, playerY, playerW, playerH) {
+export function EnemyCheckCollision(ctx, playerX, playerY, playerW, playerH) {
     for (let i = 0; i < projectiles.length; i++) {
         if (projectiles[i].x < playerX + playerW &&
             projectiles[i].x + projW > playerX &&
             projectiles[i].y < playerY + playerH &&
             projectiles[i].y + projH > playerY) {
+            ctx.clearRect(projectiles[i].x, projectiles[i].y, projW, projH);
             projectiles.splice(i, 1);
             return true;
         }

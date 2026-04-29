@@ -5,11 +5,13 @@ let projectiles = [];
 let projOffset = 15;
 let projY = 680;
 let projSpeed = 10;
-let projW = 10;
-let projH = 20;
+let projW = 50;
+let projH = 65;
 
 
 const enemyDeath = new Audio("soundEffects\\lumora_studios-pixel-explosion-319166.mp3")
+const playerBullet = new Image();
+playerBullet.src = "assets/playerBullet.png";
 
 
 //push a projectile into the array 
@@ -44,10 +46,7 @@ export function DrawProjectile(ctx)
     
     for(let p of projectiles)
     {
-        ctx.beginPath();
-        ctx.rect(p.x, p.y, projW, projH);
-        ctx.closePath();
-        ctx.fill();
+        ctx.drawImage(playerBullet, p.x, p.y, projW, projH);
     }
     
 }
@@ -86,7 +85,7 @@ export function CheckCollision()
                 projectiles.splice(i, 1);
                 enemies.splice(j, 1);
                 const enemyDeathClone = enemyDeath.cloneNode();
-                enemyDeath.play();
+                enemyDeathClone.play();
                 break;
             }
         }

@@ -26,8 +26,8 @@ var gameOver = false;
 //---- Lives --//
 let lives = 3;
 //icon lives 
-const iconWidth = 20;
-const iconHeight = 20;
+const iconWidth = 40;
+const iconHeight = 40;
 const iconX = 15; // 
 const iconY = 720;  
 
@@ -308,13 +308,7 @@ function DrawLives()
 
 
     // the mini icon
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.moveTo(iconX + (iconWidth / 2), iconY); 
-    ctx.lineTo(iconX, iconY + iconHeight); 
-    ctx.lineTo(iconX + iconWidth, iconY + iconHeight);
-    ctx.closePath();
-    ctx.fill();
+    ctx.drawImage(playerSprite, iconX, iconY, iconWidth, iconHeight);
 
     // draws the number of live "x3"
     ctx.fillStyle = "white";
@@ -396,7 +390,7 @@ function GameLoop()
     CheckCollision();
     DrawProjectile(ctx); 
     EnemyProjBehavior(ctx);
-    if(EnemyCheckCollision(playerX, playerY, playerWidth, playerHeight))//collison of enemy or collision of projectile
+    if(EnemyCheckCollision(ctx, playerX, playerY, playerWidth, playerHeight))//collison of enemy or collision of projectile
     {
         if (isInvulnerable)
         {
@@ -413,7 +407,6 @@ function GameLoop()
         else
         {
             gameOver = true;
-            ctx.clearRect(playerX - 20, playerY - 20, playerWidth + 40, playerHeight + 40);
             Player(); // this is to make sure the player is cleared from the screen before the game over screen appears. 
             GameOver();
             ResetEnemiesAfterDeath();
