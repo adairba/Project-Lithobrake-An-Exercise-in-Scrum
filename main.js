@@ -157,8 +157,7 @@ function Start()
     setTimeout(() => {
         document.getElementById("startPage").style.display = "none";
         gameStarted = true;
-        const spawnCopy = spawnEnemies.cloneNode();
-        spawnCopy.play();
+        spawnEnemies.play();
     }, 1000);
 
 

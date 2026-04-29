@@ -131,6 +131,7 @@ export function initEnemies(canvasWidth) {
     var horizStep = ((canvasWidth * edgeMargin) - enemyWidth) / (enemyCols - 1)
     var vertStep = enemyHeight + formationPadding;
 
+
     for (let i = 0; i < enemyRows; i++) {
         for (let j = 0; j < enemyCols; j++) {
             
@@ -155,14 +156,6 @@ export function initEnemies(canvasWidth) {
                 enemiesCreated++;
         }
     }
-
-    
-
-    const spawnCopy = spawnEnemies.cloneNode();
-    spawnCopy.play();
-
-     
-
 }
 
 // Updates each enemy that is passed into the functions' position 
@@ -187,10 +180,8 @@ export function ResetEnemies(canvasWidth) {
     projectiles.length = 0;
     enemySpeed = 0.8;
     initEnemies(canvasWidth);
+    spawnEnemies.play();
     BlinkEnemies();
-
-    const spawnCopy = spawnEnemies.cloneNode();
-    spawnCopy.play();
 }
 
 export function ResetEnemiesAfterGameOver(canvasWidth) {
@@ -198,9 +189,7 @@ export function ResetEnemiesAfterGameOver(canvasWidth) {
     projectiles.length = 0;
     enemySpeed = 0.8;
     initEnemies(canvasWidth);
-
-    const spawnCopy = spawnEnemies.cloneNode();
-    spawnCopy.play();
+    spawnEnemies.play();
 }
 
 
