@@ -408,6 +408,7 @@ function GameLoop()
         {
             gameOver = true;
             Player(); // this is to make sure the player is cleared from the screen before the game over screen appears. 
+            DrawLives();
             GameOver();
             ResetEnemiesAfterDeath();
             return;
